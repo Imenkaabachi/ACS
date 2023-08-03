@@ -11,7 +11,10 @@ import {
   OneToOne,
   ManyToOne,
   JoinColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
+import { Visitor } from '../../visitor/entities/visitor.entity';
 
 @Entity()
 export class Gate {
@@ -50,4 +53,18 @@ export class Gate {
     eager: true,
   })
   controller: Controller;
+
+  @ManyToMany(() => Visitor, (visitor) => visitor.gates)
+  @JoinTable({
+    name: 'history',
+    joinColumn: {
+      name: 'visitor_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'gate_id',
+      referencedColumnName: 'id',
+    },
+  })
+  visitors: Visitor[];
 }

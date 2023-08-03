@@ -1,6 +1,6 @@
 import { Column, PrimaryGeneratedColumn } from 'typeorm';
 
-export class CreateVisitorDto {
+export class CreateAdminDto {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -26,4 +26,10 @@ export class CreateVisitorDto {
 
   @Column()
   bioCredential: string;
+
+  @Column()
+  username: string;
+
+  @Column()
+  password: string;
 }
