@@ -13,6 +13,8 @@ import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { DataSource } from 'typeorm';
 import { Gate } from './gate/entities/gate.entity';
+import { Admin } from './visitor/entities/admin.entity';
+import { User } from './visitor/entities/user.entity';
 
 @Module({
   imports: [
@@ -22,16 +24,16 @@ import { Gate } from './gate/entities/gate.entity';
     ControllerModule,
     CameraModule,
     TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'hamza',
-      database: 'acsms',
-      entities: [Gate, Visitor, Monitoring, Controller, Camera],
-      synchronize: true,
       autoLoadEntities: true,
+      database: 'acsms',
+      entities: [Gate, Visitor, Monitoring, Controller, Camera, Admin, User],
+      host: 'localhost',
       logging: true,
+      password: 'root',
+      port: 3306,
+      synchronize: true,
+      type: 'mysql',
+      username: 'root',
     }),
   ],
   controllers: [AppController],

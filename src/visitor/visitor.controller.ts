@@ -1,23 +1,29 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
 import { VisitorService } from './visitor.service';
-import { CreateVisitorDto } from './dto/create-visitor.dto';
 import { UpdateVisitorDto } from './dto/update-visitor.dto';
+import { CreateAdminDto } from './dto/create-admin.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('visitor')
 export class VisitorController {
   constructor(private readonly visitorService: VisitorService) {}
 
-  @Post()
-  create(@Body() createVisitorDto: CreateVisitorDto) {
-    return this.visitorService.create(createVisitorDto);
+  @Post('admin')
+  createAdmin(@Body() createAdminDto: CreateAdminDto) {
+    return this.visitorService.createAdmin(createAdminDto);
+  }
+
+  @Post('user')
+  createUser(@Body() createUserDto: CreateUserDto) {
+    return this.visitorService.createUser(createUserDto);
   }
 
   @Get()
