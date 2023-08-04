@@ -7,6 +7,12 @@ export class Camera {
   id: string;
 
   @Column()
+  ip: string;
+
+  @Column()
+  serial: string;
+
+  @Column()
   photo: string;
 
   @ManyToOne(() => Gate, (gate) => gate.cameras)
