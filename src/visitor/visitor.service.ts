@@ -7,6 +7,7 @@ import { CreateAdminDto } from './dto/create-admin.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { Admin } from './entities/admin.entity';
+import { JobMapping } from './entities/jobMapping.entity';
 
 @Injectable()
 export class VisitorService {
@@ -17,14 +18,33 @@ export class VisitorService {
     private UserRepository: Repository<User>,
     @InjectRepository(Admin)
     private AdminRepository: Repository<Admin>,
+    @InjectRepository(JobMapping)
+    private JobMappingRepository: Repository<JobMapping>,
   ) {}
 
   createAdmin(createAdminDto: CreateAdminDto) {
     return this.AdminRepository.save(createAdminDto);
   }
 
-  createUser(createUserDto: CreateUserDto) {
-    return this.UserRepository.save(createUserDto);
+  async createUser(createUserDto: CreateUserDto) {
+    const { job } = createUserDto;
+
+    // Find the job mapping based on job
+    const jobMapping = await this.JobMappingRepository.findOne({
+      where: { job: job },
+    });
+
+    // Extract gates from job mapping
+    const gates = jobMapping.gates;
+
+    // Create a new user instance and set the gates
+    const newUser = this.UserRepository.create({
+      createUserDto: createUserDto,
+      gates,
+    });
+
+    // Save the new user
+    return this.UserRepository.save(newUser);
   }
 
   findAll() {
