@@ -15,6 +15,7 @@ import {
   JoinTable,
 } from 'typeorm';
 import { Visitor } from '../../visitor/entities/visitor.entity';
+import { Job } from './job.entity';
 
 @Entity()
 export class Gate {
@@ -58,13 +59,30 @@ export class Gate {
   @JoinTable({
     name: 'history',
     joinColumn: {
-      name: 'visitor_id',
+      name: 'gate_id',
       referencedColumnName: 'id',
     },
     inverseJoinColumn: {
-      name: 'gate_id',
+      name: 'visitor_id',
       referencedColumnName: 'id',
     },
   })
   visitors: Visitor[];
+
+  @ManyToMany(() => Job, (job) => job.gates, {
+    cascade: ['insert', 'remove', 'update'],
+    eager: true,
+  })
+  @JoinTable({
+    name: 'job_gate',
+    joinColumn: {
+      name: 'gate_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'role_id',
+      referencedColumnName: 'id',
+    },
+  })
+  jobs: Job[];
 }

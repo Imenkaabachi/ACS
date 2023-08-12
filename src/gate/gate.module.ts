@@ -6,10 +6,13 @@ import { Gate } from './entities/gate.entity';
 import { GateService } from './gate.service';
 import { GateController } from './gate.controller';
 import { Module } from '@nestjs/common';
+import { Job } from './entities/job.entity';
 
 @Module({
   controllers: [GateController],
-  imports: [TypeOrmModule.forFeature([Gate, Monitoring, Camera, Controller])],
+  imports: [
+    TypeOrmModule.forFeature([Gate, Monitoring, Camera, Controller, Job]),
+  ],
   providers: [GateService],
 })
 export class GateModule {}

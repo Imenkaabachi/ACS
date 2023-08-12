@@ -7,6 +7,7 @@ import { CreateAdminDto } from './dto/create-admin.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { Admin } from './entities/admin.entity';
+import { Job } from 'src/gate/entities/job.entity';
 
 @Injectable()
 export class VisitorService {
@@ -17,14 +18,25 @@ export class VisitorService {
     private UserRepository: Repository<User>,
     @InjectRepository(Admin)
     private AdminRepository: Repository<Admin>,
+    @InjectRepository(Job)
+    private JobRepository: Repository<Job>,
   ) {}
 
   createAdmin(createAdminDto: CreateAdminDto) {
     return this.AdminRepository.save(createAdminDto);
   }
 
-  createUser(createUserDto: CreateUserDto) {
-    return this.UserRepository.save(createUserDto);
+  async createUser(createUserDto: CreateUserDto) {
+    const { job } = createUserDto;
+    const role = await this.JobRepository.findOne({
+      where: { jobRole: job },
+      relations: ['gates'],
+    });
+    console.log(role.gates);
+    const gates = role.gates;
+    const user = await this.UserRepository.create(createUserDto);
+    user.gates = gates;
+    return this.UserRepository.save(user);
   }
 
   findAll() {

@@ -1,5 +1,6 @@
 import { ChildEntity, Column } from 'typeorm';
 import { Visitor } from './visitor.entity';
+import { JobRole } from 'src/generics/enums/jobRole';
 
 @ChildEntity()
 export class User extends Visitor {
@@ -7,5 +8,5 @@ export class User extends Visitor {
   inOutStatus: string;
 
   @Column()
-  job: string;
+  job: JobRole;
 }

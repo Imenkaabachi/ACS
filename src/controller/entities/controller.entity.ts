@@ -14,6 +14,9 @@ export class Controller {
   })
   signal: Signal;
 
+  @Column()
+  type: string;
+
   @OneToMany(() => Gate, (gate) => gate.controller)
   gates: Gate[];
 }
