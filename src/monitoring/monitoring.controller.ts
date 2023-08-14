@@ -40,6 +40,6 @@ export class MonitoringController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.monitoringService.remove(id);
+    return this.monitoringService.softremove(id);
   }
 }

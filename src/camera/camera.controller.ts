@@ -37,6 +37,6 @@ export class CameraController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.cameraService.remove(id);
+    return this.cameraService.softremove(id);
   }
 }

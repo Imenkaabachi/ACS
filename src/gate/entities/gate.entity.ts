@@ -15,7 +15,7 @@ import {
   JoinTable,
 } from 'typeorm';
 import { Visitor } from '../../visitor/entities/visitor.entity';
-import { Job } from './job.entity';
+import { JobRole } from 'src/generics/enums/jobRole';
 
 @Entity()
 export class Gate {
@@ -55,34 +55,20 @@ export class Gate {
   })
   controller: Controller;
 
-  @ManyToMany(() => Visitor, (visitor) => visitor.gates)
-  @JoinTable({
-    name: 'history',
-    joinColumn: {
-      name: 'gate_id',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'visitor_id',
-      referencedColumnName: 'id',
-    },
-  })
-  visitors: Visitor[];
+  // @ManyToMany(() => Visitor, (visitor) => visitor.gates)
+  // @JoinTable({
+  //   name: 'history',
+  //   joinColumn: {
+  //     name: 'gate_id',
+  //     referencedColumnName: 'id',
+  //   },
+  //   inverseJoinColumn: {
+  //     name: 'visitor_id',
+  //     referencedColumnName: 'id',
+  //   },
+  // })
+  // visitors: Visitor[];
 
-  @ManyToMany(() => Job, (job) => job.gates, {
-    cascade: ['insert', 'remove', 'update'],
-    eager: true,
-  })
-  @JoinTable({
-    name: 'job_gate',
-    joinColumn: {
-      name: 'gate_id',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'role_id',
-      referencedColumnName: 'id',
-    },
-  })
-  jobs: Job[];
+  @Column({ type: 'json' })
+  jobs: JobRole[];
 }

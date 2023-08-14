@@ -41,6 +41,6 @@ export class Visitor {
   @Column()
   bioCredential: string;
 
-  @ManyToMany(() => Gate, (gate) => gate.visitors)
-  gates: Gate[];
+  // @ManyToMany(() => Gate, (gate) => gate.visitors)
+  // gates: Gate[];
 }

@@ -15,7 +15,6 @@ import { DataSource } from 'typeorm';
 import { Gate } from './gate/entities/gate.entity';
 import { Admin } from './visitor/entities/admin.entity';
 import { User } from './visitor/entities/user.entity';
-import { Job } from './gate/entities/job.entity';
 
 @Module({
   imports: [
@@ -27,16 +26,7 @@ import { Job } from './gate/entities/job.entity';
     TypeOrmModule.forRoot({
       autoLoadEntities: true,
       database: 'acsms',
-      entities: [
-        Gate,
-        Visitor,
-        Monitoring,
-        Controller,
-        Camera,
-        Admin,
-        User,
-        Job,
-      ],
+      entities: [Gate, Visitor, Monitoring, Controller, Camera, Admin, User],
       host: 'localhost',
       logging: true,
       password: 'hamza',

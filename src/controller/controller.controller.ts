@@ -40,6 +40,6 @@ export class ControllerController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.controllerService.remove(id);
+    return this.controllerService.softremove(id);
   }
 }

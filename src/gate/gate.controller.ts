@@ -37,6 +37,6 @@ export class GateController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.gateService.remove(id);
+    return this.gateService.softremove(id);
   }
 }

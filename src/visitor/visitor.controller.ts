@@ -16,14 +16,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 export class VisitorController {
   constructor(private readonly visitorService: VisitorService) {}
 
-  @Post('admin')
-  createAdmin(@Body() createAdminDto: CreateAdminDto) {
-    return this.visitorService.createAdmin(createAdminDto);
-  }
+  // @Post('admin')
+  // createAdmin(@Body() createAdminDto: CreateAdminDto) {
+  //   return this.visitorService.createAdmin(createAdminDto);
+  // }
 
   @Post('user')
   createUser(@Body() createUserDto: CreateUserDto) {
-    return this.visitorService.createUser(createUserDto);
+    return this.visitorService.create(createUserDto);
   }
 
   @Get()
@@ -43,6 +43,6 @@ export class VisitorController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.visitorService.remove(id);
+    return this.visitorService.softremove(id);
   }
 }

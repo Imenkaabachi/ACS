@@ -5,11 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Visitor } from './entities/visitor.entity';
 import { Admin } from './entities/admin.entity';
 import { User } from './entities/user.entity';
-import { Job } from 'src/gate/entities/job.entity';
 
 @Module({
   controllers: [VisitorController],
-  imports: [TypeOrmModule.forFeature([Visitor, Admin, User, Job])],
+  imports: [TypeOrmModule.forFeature([Visitor, Admin, User])],
   providers: [VisitorService],
 })
 export class VisitorModule {}

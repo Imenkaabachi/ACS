@@ -5,7 +5,7 @@ import { Controller } from 'src/controller/entities/controller.entity';
 import { Camera } from 'src/camera/entities/camera.entity';
 import { Status } from 'src/generics/enums/status';
 import { Monitoring } from 'src/monitoring/entities/monitoring.entity';
-import { Job } from '../entities/job.entity';
+import { JobRole } from 'src/generics/enums/jobRole';
 
 export class UpdateGateDto extends PartialType(CreateGateDto) {
   alarm: Alarm;
@@ -14,5 +14,5 @@ export class UpdateGateDto extends PartialType(CreateGateDto) {
   monitoring: Monitoring;
   controller: Controller;
   camera: Camera;
-  jobs: Job[];
+  jobs: JobRole[];
 }

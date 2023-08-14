@@ -1,9 +1,10 @@
 import { Controller } from '@nestjs/common/interfaces/controllers/controller.interface';
 import { Camera } from 'src/camera/entities/camera.entity';
 import { Monitoring } from 'src/monitoring/entities/monitoring.entity';
-import { Job } from '../entities/job.entity';
 import { Alarm } from 'src/generics/enums/alarm';
 import { Status } from 'src/generics/enums/status';
+import { JobRole } from 'src/generics/enums/jobRole';
+import { IsEnum } from 'class-validator';
 
 export class CreateGateDto {
   alarm: Alarm;
@@ -13,5 +14,7 @@ export class CreateGateDto {
   monitoring: Monitoring;
   controller: Controller;
   cameras: Camera[];
-  jobs: Job[];
+
+  @IsEnum(JobRole)
+  jobs: JobRole[];
 }
