@@ -55,19 +55,22 @@ export class Gate {
   })
   controller: Controller;
 
-  // @ManyToMany(() => Visitor, (visitor) => visitor.gates)
-  // @JoinTable({
-  //   name: 'history',
-  //   joinColumn: {
-  //     name: 'gate_id',
-  //     referencedColumnName: 'id',
-  //   },
-  //   inverseJoinColumn: {
-  //     name: 'visitor_id',
-  //     referencedColumnName: 'id',
-  //   },
-  // })
-  // visitors: Visitor[];
+  @ManyToMany(() => Visitor, (visitor) => visitor.gates, {
+    cascade: ['insert', 'remove', 'update'],
+    eager: true,
+  })
+  @JoinTable({
+    name: 'history',
+    joinColumn: {
+      name: 'gate_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'visitor_id',
+      referencedColumnName: 'id',
+    },
+  })
+  visitors: Visitor[];
 
   @Column({ type: 'json' })
   jobs: JobRole[];

@@ -10,6 +10,8 @@ import {
 import { GateService } from './gate.service';
 import { CreateGateDto } from './dto/create-gate.dto';
 import { UpdateGateDto } from './dto/update-gate.dto';
+import { JobRole } from 'src/generics/enums/jobRole';
+import { Gate } from './entities/gate.entity';
 
 @Controller('gate')
 export class GateController {
@@ -28,6 +30,12 @@ export class GateController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.gateService.findOne(id);
+  }
+
+  @Get('byJob/:job')
+  async findGatesByJob(@Param('job') job: JobRole): Promise<Gate[]> {
+    console.log(job);
+    return this.gateService.findGatesByJob(job);
   }
 
   @Patch(':id')

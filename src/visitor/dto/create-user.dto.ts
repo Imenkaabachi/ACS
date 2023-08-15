@@ -1,5 +1,4 @@
 import { JobRole } from 'src/generics/enums/jobRole';
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
 
 export class CreateUserDto {
   address: string;

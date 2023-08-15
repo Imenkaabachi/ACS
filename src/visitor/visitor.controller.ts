@@ -11,6 +11,7 @@ import { VisitorService } from './visitor.service';
 import { UpdateVisitorDto } from './dto/update-visitor.dto';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { CreateUserDto } from './dto/create-user.dto';
+import { JobRole } from 'src/generics/enums/jobRole';
 
 @Controller('visitor')
 export class VisitorController {
@@ -23,7 +24,7 @@ export class VisitorController {
 
   @Post('user')
   createUser(@Body() createUserDto: CreateUserDto) {
-    return this.visitorService.create(createUserDto);
+    return this.visitorService.createUser(createUserDto);
   }
 
   @Get()
@@ -34,6 +35,10 @@ export class VisitorController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.visitorService.findOne(id);
+  }
+  @Get('user/:job')
+  findByRole(@Param('job') job: JobRole) {
+    return this.visitorService.findByRole(job);
   }
 
   @Patch(':id')

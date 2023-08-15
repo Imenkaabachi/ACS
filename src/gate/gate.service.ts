@@ -11,16 +11,40 @@ import { Gate } from './entities/gate.entity';
 import { Not, Repository } from 'typeorm';
 import { Controller } from 'src/controller/entities/controller.entity';
 import { CrudService } from 'src/generics/crud.service';
+import { JobRole } from 'src/generics/enums/jobRole';
+import { VisitorService } from 'src/visitor/visitor.service';
 
 @Injectable()
 export class GateService extends CrudService<Gate> {
   constructor(
     @InjectRepository(Gate)
     private gateRepository: Repository<Gate>,
+    private visitorService: VisitorService,
   ) {
     super(gateRepository);
   }
-
+  async findGatesByJob(job: JobRole): Promise<Gate[]> {
+    return this.gateRepository
+      .createQueryBuilder('gate')
+      .where('JSON_CONTAINS(gate.jobs, :job)', {
+        job: JSON.stringify(job),
+      })
+      .getMany();
+  }
+  async create(createGateDto: CreateGateDto): Promise<Gate> {
+    const { jobs } = createGateDto;
+    const gate = this.gateRepository.create(createGateDto);
+    const visitors = [];
+    for (let job of jobs) {
+      const visitorsOfJob = await this.visitorService.findByRole(job);
+      for (let visitor of visitorsOfJob) {
+        visitors.push(visitor);
+      }
+    }
+    gate.visitors = visitors;
+    console.log(gate);
+    return this.gateRepository.save(gate);
+  }
   // async create(createGateDto: CreateGateDto) {
   //   const { controller, cameras } = createGateDto;
   //   if (cameras.length > 2) {
