@@ -43,7 +43,7 @@ export class VisitorService extends CrudService<Visitor> {
     const user = this.userRepository.create(createUserDto);
     const gates = await this.gateService.findGatesByJob(job);
     user.gates = gates;
-    return this.userRepository.create(user);
+    return this.userRepository.save(user);
   }
 
   // createAdmin(createAdminDto: CreateAdminDto) {
