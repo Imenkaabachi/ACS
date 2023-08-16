@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  forwardRef,
+} from '@nestjs/common';
 import { UpdateVisitorDto } from './dto/update-visitor.dto';
 import { Visitor } from './entities/visitor.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,6 +15,7 @@ import { Admin } from './entities/admin.entity';
 import { CrudService } from 'src/generics/crud.service';
 import { JobRole } from 'src/generics/enums/jobRole';
 import { GateService } from 'src/gate/gate.service';
+import { Gate } from 'src/gate/entities/gate.entity';
 
 @Injectable()
 export class VisitorService extends CrudService<Visitor> {
@@ -18,23 +24,24 @@ export class VisitorService extends CrudService<Visitor> {
     private visitorRepository: Repository<Visitor>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @Inject(forwardRef(() => GateService))
     private gateService: GateService,
   ) {
     super(visitorRepository);
   }
 
   async findByRole(jobRole: JobRole): Promise<User[]> {
-    return this.userRepository.find({
+    return await this.userRepository.find({
       where: {
         job: jobRole,
       },
     });
   }
+
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const { job } = createUserDto;
     const user = this.userRepository.create(createUserDto);
     const gates = await this.gateService.findGatesByJob(job);
-    // Save the user
     user.gates = gates;
     return this.userRepository.create(user);
   }

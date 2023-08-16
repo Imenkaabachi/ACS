@@ -1,30 +1,31 @@
 import {
   HttpException,
   HttpStatus,
+  Inject,
   Injectable,
-  NotFoundException,
+  forwardRef,
 } from '@nestjs/common';
 import { CreateGateDto } from './dto/create-gate.dto';
-import { UpdateGateDto } from './dto/update-gate.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Gate } from './entities/gate.entity';
-import { Not, Repository } from 'typeorm';
-import { Controller } from 'src/controller/entities/controller.entity';
+import { Repository } from 'typeorm';
 import { CrudService } from 'src/generics/crud.service';
 import { JobRole } from 'src/generics/enums/jobRole';
 import { VisitorService } from 'src/visitor/visitor.service';
+import { Visitor } from 'src/visitor/entities/visitor.entity';
 
 @Injectable()
 export class GateService extends CrudService<Gate> {
   constructor(
     @InjectRepository(Gate)
     private gateRepository: Repository<Gate>,
+    @Inject(forwardRef(() => VisitorService))
     private visitorService: VisitorService,
   ) {
     super(gateRepository);
   }
   async findGatesByJob(job: JobRole): Promise<Gate[]> {
-    return this.gateRepository
+    return await this.gateRepository
       .createQueryBuilder('gate')
       .where('JSON_CONTAINS(gate.jobs, :job)', {
         job: JSON.stringify(job),
