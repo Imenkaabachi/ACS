@@ -6,12 +6,14 @@ import { forwardRef, Module } from '@nestjs/common';
 import { Visitor } from 'src/visitor/entities/visitor.entity';
 import { VisitorModule } from 'src/visitor/visitor.module';
 
+
 @Module({
   controllers: [GateController],
   imports: [
-    TypeOrmModule.forFeature([Gate, Visitor]),
+
+    TypeOrmModule.forFeature([Gate, User, Admin, Visitor]),
     forwardRef(() => VisitorModule),
   ],
-  providers: [GateService],
+  providers: [GateService, VisitorService],
 })
 export class GateModule {}

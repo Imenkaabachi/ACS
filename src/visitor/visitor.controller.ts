@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { VisitorService } from './visitor.service';
 import { UpdateVisitorDto } from './dto/update-visitor.dto';
-import { CreateAdminDto } from './dto/create-admin.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { JobRole } from 'src/generics/enums/jobRole';
 
