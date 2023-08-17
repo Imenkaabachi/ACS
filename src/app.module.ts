@@ -29,7 +29,7 @@ import { User } from './visitor/entities/user.entity';
       entities: [Gate, Visitor, Monitoring, Controller, Camera, Admin, User],
       host: 'localhost',
       logging: true,
-      password: 'hamza',
+      password: 'root',
       port: 3306,
       synchronize: true,
       type: 'mysql',
