@@ -2,8 +2,8 @@ import {
   HttpException,
   HttpStatus,
   Inject,
-  Injectable,
   NotFoundException,
+  Injectable,
   forwardRef,
 } from '@nestjs/common';
 import { CreateGateDto } from './dto/create-gate.dto';
@@ -13,6 +13,7 @@ import { Repository } from 'typeorm';
 import { CrudService } from 'src/generics/crud.service';
 import { JobRole } from 'src/generics/enums/jobRole';
 import { VisitorService } from 'src/visitor/visitor.service';
+import { Visitor } from 'src/visitor/entities/visitor.entity';
 import { Controller } from 'src/controller/entities/controller.entity';
 
 @Injectable()
@@ -20,15 +21,14 @@ export class GateService extends CrudService<Gate> {
   constructor(
     @InjectRepository(Gate)
     private gateRepository: Repository<Gate>,
-
     @InjectRepository(Controller)
     private controllerRepository: Repository<Controller>,
-
     @Inject(forwardRef(() => VisitorService))
     private visitorService: VisitorService,
   ) {
     super(gateRepository);
   }
+
   async findGatesByJob(job: JobRole): Promise<Gate[]> {
     return await this.gateRepository
       .createQueryBuilder('gate')
@@ -37,6 +37,7 @@ export class GateService extends CrudService<Gate> {
       })
       .getMany();
   }
+
   async create(createGateDto: CreateGateDto): Promise<Gate> {
     const { jobs, cameras, controller } = createGateDto;
     if (cameras.length > 2) {
@@ -91,6 +92,7 @@ export class GateService extends CrudService<Gate> {
     console.log(gate);
     return this.gateRepository.save(gate);
   }
+
   // async create(createGateDto: CreateGateDto) {
   //   const { controller, cameras } = createGateDto;
   //   if (cameras.length > 2) {
