@@ -3,6 +3,7 @@ import {
   HttpStatus,
   Inject,
   Injectable,
+  NotFoundException,
   forwardRef,
 } from '@nestjs/common';
 import { CreateGateDto } from './dto/create-gate.dto';
@@ -12,13 +13,17 @@ import { Repository } from 'typeorm';
 import { CrudService } from 'src/generics/crud.service';
 import { JobRole } from 'src/generics/enums/jobRole';
 import { VisitorService } from 'src/visitor/visitor.service';
-import { Visitor } from 'src/visitor/entities/visitor.entity';
+import { Controller } from 'src/controller/entities/controller.entity';
 
 @Injectable()
 export class GateService extends CrudService<Gate> {
   constructor(
     @InjectRepository(Gate)
     private gateRepository: Repository<Gate>,
+
+    @InjectRepository(Controller)
+    private controllerRepository: Repository<Controller>,
+
     @Inject(forwardRef(() => VisitorService))
     private visitorService: VisitorService,
   ) {
@@ -33,7 +38,47 @@ export class GateService extends CrudService<Gate> {
       .getMany();
   }
   async create(createGateDto: CreateGateDto): Promise<Gate> {
-    const { jobs } = createGateDto;
+    const { jobs, cameras, controller } = createGateDto;
+    if (cameras.length > 2) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: 'cannot have more than 2 cameras per gate',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (cameras.length == 2 && cameras[0].placement == cameras[1].placement) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error:
+            "Can't have the same placement for two cameras in the same gate",
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (controller['id'] != undefined) {
+      const existingController = this.controllerRepository.findOneBy({
+        id: controller['id'],
+      });
+      if (!existingController) {
+        throw new NotFoundException('controller not found');
+      }
+      const gatesCountPerGivenController = await this.gateRepository
+        .createQueryBuilder('gate')
+        .where('gate.controllerId = :id', { id: controller['id'] })
+        .getCount();
+      if (gatesCountPerGivenController == 2) {
+        throw new HttpException(
+          {
+            status: HttpStatus.BAD_REQUEST,
+            error: 'this controller is already used by 2 gates',
+          },
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+    }
     const gate = this.gateRepository.create(createGateDto);
     const visitors = [];
     for (let job of jobs) {
