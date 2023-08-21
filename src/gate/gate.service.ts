@@ -1,4 +1,3 @@
-
 import { CreateGateDto } from './dto/create-gate.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Gate } from './entities/gate.entity';
@@ -6,9 +5,7 @@ import { Repository } from 'typeorm';
 import { CrudService } from 'src/generics/crud.service';
 import { JobRole } from 'src/generics/enums/jobRole';
 import { VisitorService } from 'src/visitor/visitor.service';
-
-
-import { Visitor } from 'src/visitor/entities/visitor.entity';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class GateService extends CrudService<Gate> {
@@ -35,9 +32,9 @@ export class GateService extends CrudService<Gate> {
     const { jobs } = createGateDto;
     const gate = this.gateRepository.create(createGateDto);
     const visitors = [];
-    for (let job of jobs) {
+    for (const job of jobs) {
       const visitorsOfJob = await this.visitorService.findByRole(job);
-      for (let visitor of visitorsOfJob) {
+      for (const visitor of visitorsOfJob) {
         visitors.push(visitor);
       }
     }

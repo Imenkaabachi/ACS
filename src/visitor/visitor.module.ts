@@ -8,13 +8,14 @@ import { User } from './entities/user.entity';
 import { Gate } from 'src/gate/entities/gate.entity';
 import { GateModule } from 'src/gate/gate.module';
 import { GateService } from 'src/gate/gate.service';
+import { Controller } from '../controller/entities/controller.entity';
 
 @Module({
   controllers: [VisitorController],
   imports: [
-    TypeOrmModule.forFeature([Visitor, Admin, User, Gate]),
+    TypeOrmModule.forFeature([Visitor, Admin, User, Gate, Controller]),
     forwardRef(() => GateModule),
   ],
-  providers: [VisitorService, GateService],
+  providers: [VisitorService, GateService]
 })
 export class VisitorModule {}

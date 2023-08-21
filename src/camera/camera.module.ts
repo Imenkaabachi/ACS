@@ -7,7 +7,7 @@ import { Gate } from 'src/gate/entities/gate.entity';
 
 @Module({
   controllers: [CameraController],
-  imports: [TypeOrmModule.forFeature([Camera, Gate])],
+  imports: [TypeOrmModule.forFeature([Camera])],
   providers: [CameraService],
 })
 export class CameraModule {}
