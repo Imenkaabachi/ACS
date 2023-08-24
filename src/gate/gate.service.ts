@@ -42,27 +42,6 @@ export class GateService extends CrudService<Gate> {
 
   async create(createGateDto: CreateGateDto): Promise<Gate> {
     const { jobs, cameras, controller } = createGateDto;
-
-    const camerasValidationErrors = await validate(createGateDto.cameras, {
-      skipMissingProperties: true,
-    });
-
-    if (camerasValidationErrors.length > 0) {
-      const detailedErrors = camerasValidationErrors.map((validationError) => {
-        const cameraErrors = [];
-        for (const property in validationError.constraints) {
-          cameraErrors.push(validationError.constraints[property]);
-        }
-
-        return {
-          message: cameraErrors,
-          error: 'Bad Request',
-          statusCode: HttpStatus.BAD_REQUEST,
-        };
-      });
-
-      throw new BadRequestException(detailedErrors);
-    }
     if (cameras.length > 2) {
       throw new HttpException(
         {
@@ -112,7 +91,6 @@ export class GateService extends CrudService<Gate> {
       }
     }
     gate.visitors = visitors;
-    console.log(gate);
     return this.gateRepository.save(gate);
   }
 
