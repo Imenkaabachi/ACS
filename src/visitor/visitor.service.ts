@@ -17,6 +17,9 @@ import { JobRole } from 'src/generics/enums/jobRole';
 import { GateService } from 'src/gate/gate.service';
 
 import { Gate } from 'src/gate/entities/gate.entity';
+import * as fs from "fs";
+import * as path from "path";
+import {Admin} from "./entities/admin.entity";
 
 @Injectable()
 export class VisitorService extends CrudService<Visitor> {
@@ -26,6 +29,9 @@ export class VisitorService extends CrudService<Visitor> {
 
     @InjectRepository(User)
     private userRepository: Repository<User>,
+
+    @InjectRepository(Admin)
+    private adminRepository: Repository<Admin>,
 
     @Inject(forwardRef(() => GateService))
     private gateService: GateService,
