@@ -1,3 +1,4 @@
+
 import {
   HttpException,
   HttpStatus,
@@ -14,6 +15,7 @@ import { Repository } from 'typeorm';
 import { CrudService } from 'src/generics/crud.service';
 import { JobRole } from 'src/generics/enums/jobRole';
 import { VisitorService } from 'src/visitor/visitor.service';
+
 import { Visitor } from 'src/visitor/entities/visitor.entity';
 import { Controller } from 'src/controller/entities/controller.entity';
 import { validate } from 'class-validator';
@@ -84,9 +86,9 @@ export class GateService extends CrudService<Gate> {
     }
     const gate = this.gateRepository.create(createGateDto);
     const visitors = [];
-    for (let job of jobs) {
+    for (const job of jobs) {
       const visitorsOfJob = await this.visitorService.findByRole(job);
-      for (let visitor of visitorsOfJob) {
+      for (const visitor of visitorsOfJob) {
         visitors.push(visitor);
       }
     }

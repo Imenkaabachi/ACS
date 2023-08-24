@@ -31,6 +31,11 @@ export class VisitorController {
     return this.visitorService.findAll();
   }
 
+  // @Get()
+  // getAllVisitorsImages() {
+  //   return this.visitorService.getAllVisitorsImages();
+  // }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.visitorService.findOne(id);

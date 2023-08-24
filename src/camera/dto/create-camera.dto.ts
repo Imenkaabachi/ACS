@@ -19,4 +19,5 @@ export class CreateCameraDto {
 
   @IsNotEmpty({ message: 'Placement is required' })
   placement: Placement;
+
 }
