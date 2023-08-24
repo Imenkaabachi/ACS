@@ -1,6 +1,6 @@
 import { Gate } from 'src/gate/entities/gate.entity';
 import { Placement } from 'src/generics/enums/placement';
-import { IsIP, IsNotEmpty, ValidateNested } from 'class-validator';
+import { IsIP, IsNotEmpty, Matches, ValidateNested } from 'class-validator';
 
 export class CreateCameraDto {
   @IsIP()
@@ -11,16 +11,13 @@ export class CreateCameraDto {
   type: string;
 
   @IsNotEmpty({ message: 'Serial is required' })
+  @Matches(/^[A-Z0-9]{16}$/)
   serial: string;
 
   @IsNotEmpty({ message: 'Photo is required' })
   photo: string;
 
   @IsNotEmpty({ message: 'Placement is required' })
-  @ValidateNested()
   placement: Placement;
 
-  @IsNotEmpty({ message: 'Gate is required' })
-  @ValidateNested()
-  gate: Gate;
 }

@@ -16,9 +16,10 @@ import {
 } from 'typeorm';
 import { Visitor } from '../../visitor/entities/visitor.entity';
 import { JobRole } from 'src/generics/enums/jobRole';
+import { TimeEntities } from 'src/generics/timeEntities';
 
 @Entity()
-export class Gate {
+export class Gate extends TimeEntities {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

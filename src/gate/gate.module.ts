@@ -20,6 +20,7 @@ import { Controller } from '../controller/entities/controller.entity';
       Visitor,
       Controller,
     ]),
+
     forwardRef(() => VisitorModule),
   ],
   providers: [GateService, VisitorService],

@@ -10,6 +10,7 @@ import { GateModule } from 'src/gate/gate.module';
 import { GateService } from 'src/gate/gate.service';
 import { Controller } from '../controller/entities/controller.entity';
 
+
 @Module({
   controllers: [VisitorController],
   imports: [

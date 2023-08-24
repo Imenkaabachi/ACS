@@ -1,9 +1,10 @@
 import { Gate } from 'src/gate/entities/gate.entity';
 import { Signal } from 'src/generics/enums/signal';
+import { TimeEntities } from 'src/generics/timeEntities';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity('controller')
-export class Controller {
+export class Controller extends TimeEntities {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
