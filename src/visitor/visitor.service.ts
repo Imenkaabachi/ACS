@@ -40,27 +40,58 @@ export class VisitorService extends CrudService<Visitor> {
       },
     });
   }
+  async getAllVisitorsImages(): Promise<{ id: string; bioCredential: string }[]> {
+    const visitors = await this.userRepository.find();
 
-  // async getAllVisitorsImages(): Promise<
-  //   { id: string; bioCredential: string }[]
-  // > {
-  //   const visitors = await this.visitorRepository.find();
-  //
-  //   return visitors.map((visitor) => ({
-  //     id: visitor.id,
-  //     bioCredential: visitor.bioCredential,
-  //   }));
+    return visitors.map(visitor => ({
+      id: visitor.id,
+      bioCredential: visitor.bioCredential,
+    }));
+  }
+
+  //OLD VERSION OF CREATE USER
+  // async createUser(createUserDto: CreateUserDto): Promise<User> {
+  //   const { job } = createUserDto;
+  //   const user = this.userRepository.create(createUserDto);
+  //   const gates = await this.gateService.findGatesByJob(job);
+  //   user.gates = gates;
+  //   return this.userRepository.save(user);
   // }
+  async createUser(createUserDto: CreateUserDto,bioCredential: Express.Multer.File): Promise<User>{
+    const uploadDir = 'D://Visitors Directory';
+    const fileName = `${Date.now()}-${bioCredential.originalname}`;
+    const filePath = path.join(uploadDir, fileName);
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
+    try {
+      await fs.promises.writeFile(filePath, bioCredential.buffer);
+    } catch (error) {
+      throw new Error('Failed to save bioCredential file');
+    }
+
     const { job } = createUserDto;
-    const user = this.userRepository.create(createUserDto);
+    const user = this.userRepository.create({
+      ...createUserDto,
+      bioCredential: filePath, // Store the file path in the database
+    });
     const gates = await this.gateService.findGatesByJob(job);
     user.gates = gates;
     return this.userRepository.save(user);
   }
+  async createAdmin(createAdminDto: CreateAdminDto,bioCredential: Express.Multer.File) {
+    const uploadDir = 'D://Visitors Directory';
+    const fileName = `${Date.now()}-${bioCredential.originalname}`;
+    const filePath = path.join(uploadDir, fileName);
 
-  // createAdmin(createAdminDto: CreateAdminDto) {
-  //   return this.AdminRepository.save(createAdminDto);
-  // }
+    try {
+      await fs.promises.writeFile(filePath, bioCredential.buffer);
+    } catch (error) {
+      throw new Error('Failed to save bioCredential file');
+    }
+
+    const admin = this.adminRepository.create({
+      ...createAdminDto,
+      bioCredential: filePath, // Store the file path in the database
+    });
+    return this.adminRepository.save(admin);
+  }
 }

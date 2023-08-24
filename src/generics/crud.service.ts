@@ -34,6 +34,6 @@ export class CrudService<Entity extends HasIdInterface> {
     if (!Entity) {
       throw new NotFoundException();
     }
-    return await this.repository.softRemove(Entity);
+    return await this.repository.remove(Entity);
   }
 }

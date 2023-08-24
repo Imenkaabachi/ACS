@@ -30,6 +30,11 @@ export class CameraController {
     return this.cameraService.register(callback);
   }
 
+  @Get('getDeviceKey')
+  async connectCamera(){
+    return this.cameraService.getDeviceKey();
+  }
+
   @Get()
   findAll() {
     return this.cameraService.findAll();
@@ -40,6 +45,16 @@ export class CameraController {
     return this.cameraService.findOne(id);
   }
 
+  @Post('camera-callback')
+  callback(@Body() callback) {
+    console.log('hello in the callback');
+    return this.cameraService.callback(callback);
+  }
+  @Post('image-registration-callback')
+  register(@Body() callback) {
+    console.log('hello in the ');
+    return this.cameraService.register(callback);
+  }
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCameraDto: UpdateCameraDto) {
     return this.cameraService.update(id, updateCameraDto);

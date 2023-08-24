@@ -13,8 +13,7 @@ import {
 import { Sexe } from '../../generics/enums/sexe';
 
 export class CreateAdminDto {
-  @IsUUID()
-  id: string;
+
 
   @IsString()
   @IsNotEmpty()
@@ -37,14 +36,9 @@ export class CreateAdminDto {
   @IsNotEmpty({ message: 'Sexe is required' }) // Custom error message
   sexe: string;
 
-  @IsNumber()
   @IsNotEmpty({ message: 'Age is required' }) // Custom error message
-  @Min(0, { message: 'Age must be at least 0' }) // Custom error message
-  @Max(150, { message: 'Age cannot exceed 150' }) // Custom error message
-  age: number;
+  age: string;
 
-  @IsNotEmpty({ message: 'Bio credential is required' }) // Custom error message
-  bioCredential: string;
 
   @IsString()
   @IsNotEmpty({ message: 'Username is required' }) // Custom error message

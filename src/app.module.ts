@@ -15,6 +15,7 @@ import { DataSource } from 'typeorm';
 import { Gate } from './gate/entities/gate.entity';
 import { Admin } from './visitor/entities/admin.entity';
 import { User } from './visitor/entities/user.entity';
+import {HttpModule} from "@nestjs/axios";
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { User } from './visitor/entities/user.entity';
       type: 'mysql',
       username: 'root',
     }),
+      HttpModule
   ],
   controllers: [AppController],
   providers: [AppService],

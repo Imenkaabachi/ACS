@@ -13,6 +13,7 @@ import {
 } from 'class-validator';
 import { Status } from '../../generics/enums/status';
 import { Sexe } from '../../generics/enums/sexe';
+import {InOutStatus} from "../../generics/enums/InOutStatus";
 
 export class CreateUserDto {
   @IsString()
@@ -36,29 +37,10 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'Sexe is required' }) // Custom error message
   sexe: string;
 
-  @IsNumber()
   @IsNotEmpty({ message: 'Age is required' }) // Custom error message
-  @Min(0, { message: 'Age must be at least 0' }) // Custom error message
-  @Max(150, { message: 'Age cannot exceed 150' }) // Custom error message
-  age: number;
+  age: string;
 
-  @IsNotEmpty({ message: 'Bio credential is required' }) // Custom error message
-  bioCredential: string;
-
-  @IsString()
-  @IsNotEmpty({ message: 'Username is required' }) // Custom error message
-  @Length(8, 15, { message: 'Username must be between 8 and 15 characters' }) // Custom error message
-  username: string;
-
-  @IsString()
-  @IsNotEmpty({ message: 'Password is required' }) // Custom error message
-  @Length(8, 8, { message: 'Password must be exactly 8 characters' }) // Custom error message
-  @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z\d]).{8,}$/, {
-    message: 'Password is too weak',
-  }) // Custom error message
-  password: string;
-
-  @IsIn([Status.Closed, Status.Opened])
+  @IsIn([InOutStatus.In, InOutStatus.Out])
   @IsNotEmpty({ message: 'In/Out status is required' }) // Custom error message
   inOutStatus: string;
 

@@ -4,5 +4,6 @@ import { IsNotEmpty } from 'class-validator';
 export class CreateMonitoringDto {
   @IsNotEmpty()
   type: string;
+
   gate: Gate;
 }

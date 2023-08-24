@@ -37,7 +37,7 @@ export class Visitor extends TimeEntities {
   sexe: string;
 
   @Column()
-  age: number;
+  age: string;
 
   @Column()
   bioCredential: string;
