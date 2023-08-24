@@ -30,7 +30,7 @@ export class Gate extends TimeEntities {
   alarm: Alarm;
 
   @Column()
-  openDate: string;
+  openDate: String;
 
   @Column({
     default: Status.Closed,

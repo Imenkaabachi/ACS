@@ -18,6 +18,7 @@ import { IsJobRoleArray } from 'src/generics/validators/job-role-array.validator
 import { CreateCameraDto } from 'src/camera/dto/create-camera.dto';
 import { CreateControllerDto } from 'src/controller/dto/create-controller.dto';
 import { CreateMonitoringDto } from 'src/monitoring/dto/create-monitoring.dto';
+import { Type } from 'class-transformer';
 
 export class CreateGateDto {
   @IsEnum(Alarm)
@@ -30,20 +31,23 @@ export class CreateGateDto {
 
   @IsDateString()
   @IsNotEmpty({ message: 'Open date is required' })
-  openDate: string;
+  openDate: String;
 
   @IsEnum(Status)
   @IsNotEmpty({ message: 'Status is required' })
   status: Status;
 
   @IsNotEmpty({ message: 'Monitoring is required' })
+  @Type(() => CreateMonitoringDto)
   monitoring: CreateMonitoringDto;
 
   @IsNotEmpty({ message: 'Controller is required' })
+  @Type(() => CreateControllerDto)
   controller: CreateControllerDto;
 
-  @ValidateNested({ each: true })
   @IsArray()
+  @Type(() => CreateCameraDto)
+  @ValidateNested({ each: true })
   cameras: CreateCameraDto[];
 
   @IsJobRoleArray({ message: 'Invalid job roles provided' })
