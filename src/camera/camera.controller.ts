@@ -19,6 +19,16 @@ export class CameraController {
   create(@Body() createCameraDto: CreateCameraDto) {
     return this.cameraService.create(createCameraDto);
   }
+  @Post('camera-callback')
+  callback(@Body() callback) {
+    console.log('hello in the callback');
+    return this.cameraService.callback(callback);
+  }
+  @Post('image-registration-callback')
+  register(@Body() callback) {
+    console.log('hello in the ');
+    return this.cameraService.register(callback);
+  }
 
   @Get()
   findAll() {

@@ -5,6 +5,7 @@ import {
   NotFoundException,
   Injectable,
   forwardRef,
+  BadRequestException,
 } from '@nestjs/common';
 import { CreateGateDto } from './dto/create-gate.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,6 +16,7 @@ import { JobRole } from 'src/generics/enums/jobRole';
 import { VisitorService } from 'src/visitor/visitor.service';
 import { Visitor } from 'src/visitor/entities/visitor.entity';
 import { Controller } from 'src/controller/entities/controller.entity';
+import { validate } from 'class-validator';
 
 @Injectable()
 export class GateService extends CrudService<Gate> {
@@ -40,6 +42,27 @@ export class GateService extends CrudService<Gate> {
 
   async create(createGateDto: CreateGateDto): Promise<Gate> {
     const { jobs, cameras, controller } = createGateDto;
+
+    const camerasValidationErrors = await validate(createGateDto.cameras, {
+      skipMissingProperties: true,
+    });
+
+    if (camerasValidationErrors.length > 0) {
+      const detailedErrors = camerasValidationErrors.map((validationError) => {
+        const cameraErrors = [];
+        for (const property in validationError.constraints) {
+          cameraErrors.push(validationError.constraints[property]);
+        }
+
+        return {
+          message: cameraErrors,
+          error: 'Bad Request',
+          statusCode: HttpStatus.BAD_REQUEST,
+        };
+      });
+
+      throw new BadRequestException(detailedErrors);
+    }
     if (cameras.length > 2) {
       throw new HttpException(
         {
