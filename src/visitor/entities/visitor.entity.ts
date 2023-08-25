@@ -39,7 +39,9 @@ export class Visitor extends TimeEntities {
   @Column()
   age: string;
 
-  @Column()
+  @Column({
+    default: null,
+  })
   bioCredential: string;
 
   @ManyToMany(() => Gate, (gate) => gate.visitors)

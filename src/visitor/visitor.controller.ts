@@ -5,29 +5,37 @@ import {
   Get,
   Param,
   Patch,
-  Post, UploadedFile, UseInterceptors,
+  Post,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { VisitorService } from './visitor.service';
 import { UpdateVisitorDto } from './dto/update-visitor.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { JobRole } from 'src/generics/enums/jobRole';
-import {FileInterceptor} from "@nestjs/platform-express";
-import {CreateAdminDto} from "./dto/create-admin.dto";
+import { FileInterceptor } from '@nestjs/platform-express';
+import { CreateAdminDto } from './dto/create-admin.dto';
 
 @Controller('visitor')
 export class VisitorController {
   constructor(private readonly visitorService: VisitorService) {}
 
   @Post('register-admin')
-  @UseInterceptors(FileInterceptor('bioCredential')) // 'bioCredential' should match the property name in the DTO
-  async registerAdmin(@UploadedFile() bioCredential: Express.Multer.File,@Body() createAdminDto: CreateAdminDto) {
-    return this.visitorService.createAdmin(createAdminDto,bioCredential);
+  // @UseInterceptors(FileInterceptor('bioCredential')) // 'bioCredential' should match the property name in the DTO
+  async registerAdmin(
+    //@UploadedFile() bioCredential: Express.Multer.File,
+    @Body() createAdminDto: CreateAdminDto,
+  ) {
+    return this.visitorService.createAdmin(createAdminDto);
   }
 
   @Post('register-user')
   @UseInterceptors(FileInterceptor('bioCredential')) // 'bioCredential' should match the property name in the DTO
-  async registerUser(@UploadedFile() bioCredential: Express.Multer.File, @Body() createUserDto: CreateUserDto) {
-    return this.visitorService.createUser(createUserDto,bioCredential);
+  async registerUser(
+    @UploadedFile() bioCredential: Express.Multer.File,
+    @Body() createUserDto: CreateUserDto,
+  ) {
+    return this.visitorService.createUser(createUserDto, bioCredential);
   }
 
   @Get()

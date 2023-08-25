@@ -13,8 +13,6 @@ import {
 import { Sexe } from '../../generics/enums/sexe';
 
 export class CreateAdminDto {
-
-
   @IsString()
   @IsNotEmpty()
   address: string;
@@ -39,7 +37,6 @@ export class CreateAdminDto {
   @IsNotEmpty({ message: 'Age is required' }) // Custom error message
   age: string;
 
-
   @IsString()
   @IsNotEmpty({ message: 'Username is required' }) // Custom error message
   @Length(8, 15, { message: 'Username must be between 8 and 15 characters' }) // Custom error message
@@ -50,6 +47,6 @@ export class CreateAdminDto {
   @Length(8, 8, { message: 'Password must be exactly 8 characters' }) // Custom error message
   @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z\d]).{8,}$/, {
     message: 'Password is too weak',
-  }) // Custom error message
+  })
   password: string;
 }
