@@ -64,24 +64,10 @@ export class VisitorService extends CrudService<Visitor> {
   //   user.gates = gates;
   //   return this.userRepository.save(user);
   // }
-  async createUser(
-    createUserDto: CreateUserDto,
-    bioCredential: Express.Multer.File,
-  ): Promise<User> {
-    const uploadDir = 'D://Visitors Directory';
-    const fileName = `${Date.now()}-${bioCredential.originalname}`;
-    const filePath = path.join(uploadDir, fileName);
-
-    try {
-      await fs.promises.writeFile(filePath, bioCredential.buffer);
-    } catch (error) {
-      throw new Error('Failed to save bioCredential file');
-    }
-
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
     const { job } = createUserDto;
     const user = this.userRepository.create({
       ...createUserDto,
-      bioCredential: filePath, // Store the file path in the database
     });
     const gates = await this.gateService.findGatesByJob(job);
     user.gates = gates;
@@ -104,21 +90,30 @@ export class VisitorService extends CrudService<Visitor> {
   //   });
   //   return this.adminRepository.save(admin);
   // }
-  async createAdmin(createAdminDto: CreateAdminDto) {
+  async registerAdmin(createAdminDto: CreateAdminDto) {
     console.log(createAdminDto);
     const { email, password, username } = createAdminDto;
     const admin = this.adminRepository.create(createAdminDto);
-    const salt = bcrypt.genSalt(10);
+    const salt = await bcrypt.genSalt(10);
     admin.password = await bcrypt.hash(password, salt);
-    console.log(admin);
     try {
-      await this.userRepository.save(admin);
+      await this.adminRepository.save(admin);
     } catch (e) {
       throw e;
     }
     return {
+      id: admin.id,
       email: admin.email,
       username: admin.username,
     };
+  }
+  async uploadProfilePic(id: string, file: Express.Multer.File) {
+    const admin = await this.adminRepository.findOne({ where: { id: id } });
+    if (!admin) {
+      throw new Error(`User with id ${id} not found`);
+    }
+    console.log('uploadProfilePic');
+    admin.bioCredential = `${file.filename}`;
+    return await this.adminRepository.save(admin);
   }
 }

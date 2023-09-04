@@ -24,10 +24,10 @@ export class CameraController {
     console.log('hello in the callback');
     return this.cameraService.callback(callback);
   }
-  @Post('image-registration-callback')
-  register(@Body() callback) {
+  @Post('test')
+  register() {
     console.log('hello in the ');
-    return this.cameraService.register(callback);
+    return this.cameraService.register();
   }
 
   @Get()
