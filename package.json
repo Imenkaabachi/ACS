@@ -39,6 +39,7 @@
     "flatted": "^3.2.7",
     "mysql2": "^3.6.0",
     "reflect-metadata": "^0.1.13",
+    "request-promise": "^4.2.6",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.17",
     "uuid": "^9.0.0",

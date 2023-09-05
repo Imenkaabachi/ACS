@@ -15,7 +15,7 @@ export class Camera extends TimeEntities {
   ip: string;
 
   @Column()
-  serial: string;
+  deviceKey: string;
 
   @Column({
     type: 'enum',

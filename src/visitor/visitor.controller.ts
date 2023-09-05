@@ -41,17 +41,26 @@ export class VisitorController {
     return this.visitorService.registerAdmin(createAdminDto);
   }
 
+  // @Post('register-user')
+  // async registerUser(@Body() createUserDto: CreateUserDto) {
+  //   return this.visitorService.createUser(createUserDto);
+  // }
+  // @Post('profile-photo/:id')
+  // @UseInterceptors(FileInterceptor('file', storage))
+  // async uploadProfilePhoto(
+  //   @Param('id') id: string,
+  //   @UploadedFile() file: Express.Multer.File,
+  // ) {
+  //   return this.visitorService.uploadProfilePic(id, file);
+  // }
+
   @Post('register-user')
-  async registerUser(@Body() createUserDto: CreateUserDto) {
-    return this.visitorService.createUser(createUserDto);
-  }
-  @Post('profile-photo/:id')
   @UseInterceptors(FileInterceptor('file', storage))
-  async uploadProfilePhoto(
-    @Param('id') id: string,
+  async registerUser(
+    @Body() createUserDto: CreateUserDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.visitorService.uploadProfilePic(id, file);
+    return this.visitorService.createUser(createUserDto, file);
   }
 
   @Get()

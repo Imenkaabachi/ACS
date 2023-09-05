@@ -24,17 +24,15 @@ export class CameraController {
     console.log('hello in the callback');
     return this.cameraService.callback(callback);
   }
-  @Post('test')
-  register() {
-    console.log('hello in the ');
-    return this.cameraService.register();
-  }
 
   @Get()
   findAll() {
     return this.cameraService.findAll();
   }
-
+  @Get(':deviceKey')
+  getByDeviceKey(@Param('deviceKey') deviceKey: string) {
+    return this.cameraService.getByDeviceKey(deviceKey);
+  }
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.cameraService.findOne(id);

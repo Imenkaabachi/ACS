@@ -19,6 +19,7 @@ import { Gate } from 'src/gate/entities/gate.entity';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Admin } from './entities/admin.entity';
+var request = require('request-promise');
 
 @Injectable()
 export class VisitorService extends CrudService<Visitor> {
@@ -56,6 +57,43 @@ export class VisitorService extends CrudService<Visitor> {
     }));
   }
 
+  async createUser(
+    createUserDto: CreateUserDto,
+    file: Express.Multer.File,
+  ): Promise<User> {
+    const path = 'C:/Users/ASUS X509 I7/ACS/uploads/BioCredentials/';
+    try {
+      const user = await this.userRepository.save({
+        ...createUserDto,
+        bioCredential: file.filename,
+      });
+      const { job } = createUserDto;
+      const gates = await this.gateService.findGatesByJob(job);
+      user.gates = gates;
+      var options = {
+        method: 'POST',
+        uri: 'http://127.0.0.1:5000/encode',
+        body: {
+          path: path + file.filename,
+          id: user.id,
+        },
+        json: true,
+      };
+      var sendrequest = await request(options)
+        .then(function (parsedBody) {
+          console.log(parsedBody['encoded_image']);
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
+
+      return user;
+    } catch (error) {
+      console.error('Error creating user:', error);
+      throw error;
+    }
+  }
+
   //OLD VERSION OF CREATE USER
   // async createUser(createUserDto: CreateUserDto): Promise<User> {
   //   const { job } = createUserDto;
@@ -64,15 +102,15 @@ export class VisitorService extends CrudService<Visitor> {
   //   user.gates = gates;
   //   return this.userRepository.save(user);
   // }
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const { job } = createUserDto;
-    const user = this.userRepository.create({
-      ...createUserDto,
-    });
-    const gates = await this.gateService.findGatesByJob(job);
-    user.gates = gates;
-    return this.userRepository.save(user);
-  }
+  // async createUser(createUserDto: CreateUserDto): Promise<User> {
+  //   const { job } = createUserDto;
+  //   const user = this.userRepository.create({
+  //     ...createUserDto,
+  //   });
+  //   const gates = await this.gateService.findGatesByJob(job);
+  //   user.gates = gates;
+  //   return this.userRepository.save(user);
+  // }
   // async createAdmin(createAdminDto: CreateAdminDto,bioCredential: Express.Multer.File) {
   //   const uploadDir = 'D://Visitors Directory';
   //   const fileName = `${Date.now()}-${bioCredential.originalname}`;
@@ -107,13 +145,12 @@ export class VisitorService extends CrudService<Visitor> {
       username: admin.username,
     };
   }
-  async uploadProfilePic(id: string, file: Express.Multer.File) {
-    const admin = await this.adminRepository.findOne({ where: { id: id } });
-    if (!admin) {
-      throw new Error(`User with id ${id} not found`);
-    }
-    console.log('uploadProfilePic');
-    admin.bioCredential = `${file.filename}`;
-    return await this.adminRepository.save(admin);
-  }
+  // async uploadProfilePic(id: string, file: Express.Multer.File) {
+  //   const admin = await this.adminRepository.findOne({ where: { id: id } });
+  //   if (!admin) {
+  //     throw new Error(`User with id ${id} not found`);
+  //   }
+  //   admin.bioCredential = `${file.filename}`;
+  //   return await this.adminRepository.save(admin);
+  // }
 }
