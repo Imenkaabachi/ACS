@@ -1,15 +1,16 @@
 import {
-  HttpException,
-  HttpStatus,
+  Inject,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
+  forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Camera } from './entities/camera.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CrudService } from 'src/generics/crud.service';
-import { ChildProcess } from 'child_process';
+import { ControllerService } from 'src/controller/controller.service';
+import { Gateway } from 'src/gateway/gateway';
+import { Controller } from 'src/controller/entities/controller.entity';
 var request = require('request-promise');
 
 @Injectable()
@@ -17,9 +18,14 @@ export class CameraService extends CrudService<Camera> {
   constructor(
     @InjectRepository(Camera)
     private cameraRepository: Repository<Camera>,
+    @Inject(forwardRef(() => ControllerService))
+    private controllerService: ControllerService,
+    @Inject(forwardRef(() => Gateway))
+    private gateaway: Gateway,
   ) {
     super(cameraRepository);
   }
+
   async getByDeviceKey(deviceKey: string): Promise<Camera> {
     const cam = await this.cameraRepository.findOne({
       where: { deviceKey: deviceKey },
@@ -36,46 +42,43 @@ export class CameraService extends CrudService<Camera> {
     const data = {
       image: imgBase64,
     };
-    var options = {
+
+    var matching_request = {
       method: 'POST',
       uri: 'http://127.0.0.1:5000/compare',
       body: data,
       json: true,
     };
-    await request(options)
-      .then(function (parsedBody) {
+    let access: boolean;
+
+    await request(matching_request)
+      .then(async (parsedBody: { id: any }) => {
         const { id } = parsedBody;
         if (id == null) {
           console.log('not welcome');
         } else if (id) {
           const ids = gate.visitors.map((visitor) => visitor.id);
-          const access = ids.includes(id);
+          access = ids.includes(id);
           if (!access) {
             console.log("you don't have access to this department");
           } else {
-            console.log('you are welcome');
+            console.log(gate.controller.serialNumber);
+            console.log(
+              this.gateaway.getSocketBySerialNumber(
+                gate.controller.serialNumber,
+              ),
+            );
+            this.gateaway
+              .getSocketBySerialNumber(gate.controller.serialNumber)
+              .send('relay ' + gate.relayIndex);
           }
         }
         return parsedBody;
       })
-      .catch(function (err) {
+      .catch(function (err: any) {
         console.log(err);
       });
+
     return true;
-    // const fs = require('fs');
-    // const imageDataBuffer = Buffer.from(imgBase64, 'base64');
-    // const directoryPath = 'C:/Users/ASUS X509 I7/ACS/Capturedimages';
-    // const filename = 'image.jpg';
-    // if (!fs.existsSync(directoryPath)) {
-    //   fs.mkdirSync(directoryPath);
-    // }
-    // const filePath = `${directoryPath}/${filename}`;
-    // fs.writeFile(filePath, imageDataBuffer, (err: any) => {
-    //   if (err) {
-    //     console.error('Error saving image:', err);
-    //   } else {
-    //     console.log('Image saved successfully:', filePath);
-    //   }
-    // });
   }
 }

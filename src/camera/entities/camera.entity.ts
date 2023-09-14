@@ -23,9 +23,6 @@ export class Camera extends TimeEntities {
   })
   placement: Placement;
 
-  @Column()
-  photo: string;
-
   @ManyToOne(() => Gate, (gate) => gate.cameras)
   gate: Gate;
 }

@@ -1,10 +1,4 @@
-import {
-  Inject,
-  Injectable,
-  NotFoundException,
-  forwardRef,
-} from '@nestjs/common';
-import { UpdateVisitorDto } from './dto/update-visitor.dto';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { Visitor } from './entities/visitor.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -15,9 +9,6 @@ import { CrudService } from 'src/generics/crud.service';
 import { JobRole } from 'src/generics/enums/jobRole';
 import { GateService } from 'src/gate/gate.service';
 import * as bcrypt from 'bcrypt';
-import { Gate } from 'src/gate/entities/gate.entity';
-import * as fs from 'fs';
-import * as path from 'path';
 import { Admin } from './entities/admin.entity';
 var request = require('request-promise');
 
@@ -63,13 +54,14 @@ export class VisitorService extends CrudService<Visitor> {
   ): Promise<User> {
     const path = 'C:/Users/ASUS X509 I7/ACS/uploads/BioCredentials/';
     try {
-      const user = await this.userRepository.save({
+      const user = await this.userRepository.create({
         ...createUserDto,
         bioCredential: file.filename,
       });
       const { job } = createUserDto;
       const gates = await this.gateService.findGatesByJob(job);
       user.gates = gates;
+      await this.userRepository.save(user);
       var options = {
         method: 'POST',
         uri: 'http://127.0.0.1:5000/encode',
@@ -79,14 +71,13 @@ export class VisitorService extends CrudService<Visitor> {
         },
         json: true,
       };
-      var sendrequest = await request(options)
+      await request(options)
         .then(function (parsedBody) {
           console.log(parsedBody['encoded_image']);
         })
         .catch(function (err) {
           console.log(err);
         });
-
       return user;
     } catch (error) {
       console.error('Error creating user:', error);

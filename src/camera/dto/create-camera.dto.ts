@@ -14,9 +14,6 @@ export class CreateCameraDto {
   @Matches(/^[A-Z0-9]{16}$/)
   deviceKey: string;
 
-  @IsNotEmpty({ message: 'Photo is required' })
-  photo: string;
-
   @IsNotEmpty({ message: 'Placement is required' })
   placement: Placement;
 }

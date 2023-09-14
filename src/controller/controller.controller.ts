@@ -19,7 +19,6 @@ export class ControllerController {
   create(@Body() createControllerDto: CreateControllerDto) {
     return this.controllerService.create(createControllerDto);
   }
-
   @Get()
   findAll() {
     return this.controllerService.findAll();

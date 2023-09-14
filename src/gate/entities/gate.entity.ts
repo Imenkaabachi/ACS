@@ -37,6 +37,9 @@ export class Gate extends TimeEntities {
   })
   status: Status;
 
+  @Column()
+  relayIndex: number;
+
   @OneToMany(() => Camera, (camera) => camera.gate, {
     cascade: ['insert', 'remove', 'update'],
     eager: true,
@@ -61,7 +64,7 @@ export class Gate extends TimeEntities {
     eager: true,
   })
   @JoinTable({
-    name: 'history',
+    name: 'access_rights',
     joinColumn: {
       name: 'gate_id',
       referencedColumnName: 'id',
