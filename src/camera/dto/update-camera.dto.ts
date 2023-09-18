@@ -13,7 +13,7 @@ export class UpdateCameraDto extends PartialType(CreateCameraDto) {
 
   @IsNotEmpty({ message: 'Serial is required' })
   @Matches(/^[A-Z0-9]{16}$/)
-  serial: string;
+  deviceKey: string;
 
   @IsNotEmpty({ message: 'Photo is required' })
   @IsString()

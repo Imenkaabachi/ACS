@@ -7,4 +7,7 @@ export class CreateControllerDto {
 
   @IsNotEmpty({ message: 'Type is required' })
   type: string;
+
+  @IsNotEmpty({ message: 'serial number is required' })
+  serialNumber: string;
 }

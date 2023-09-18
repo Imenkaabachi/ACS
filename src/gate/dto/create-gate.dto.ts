@@ -9,6 +9,7 @@ import {
   IsDate,
   IsDateString,
   IsEnum,
+  IsInt,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -19,6 +20,7 @@ import { CreateCameraDto } from 'src/camera/dto/create-camera.dto';
 import { CreateControllerDto } from 'src/controller/dto/create-controller.dto';
 import { CreateMonitoringDto } from 'src/monitoring/dto/create-monitoring.dto';
 import { Type } from 'class-transformer';
+import { IsRelayIndex } from 'src/generics/validators/RelayIndex.validator';
 
 export class CreateGateDto {
   @IsEnum(Alarm)
@@ -37,13 +39,17 @@ export class CreateGateDto {
   @IsNotEmpty({ message: 'Status is required' })
   status: Status;
 
+  @IsInt()
+  @IsNotEmpty()
+  @IsRelayIndex()
+  relayIndex: number;
+
   @IsNotEmpty({ message: 'Monitoring is required' })
   @Type(() => CreateMonitoringDto)
   monitoring: CreateMonitoringDto;
 
   @IsNotEmpty({ message: 'Controller is required' })
-  @Type(() => CreateControllerDto)
-  controller: CreateControllerDto;
+  controllerId: string;
 
   @IsArray()
   @Type(() => CreateCameraDto)

@@ -15,6 +15,10 @@ import { DataSource } from 'typeorm';
 import { Gate } from './gate/entities/gate.entity';
 import { Admin } from './visitor/entities/admin.entity';
 import { User } from './visitor/entities/user.entity';
+import { HttpModule } from '@nestjs/axios';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { GatewayModule } from './gateway/gateway.module';
 
 @Module({
   imports: [
@@ -23,18 +27,21 @@ import { User } from './visitor/entities/user.entity';
     MonitoringModule,
     ControllerModule,
     CameraModule,
+    GatewayModule,
     TypeOrmModule.forRoot({
       autoLoadEntities: true,
       database: 'acsms',
       entities: [Gate, Visitor, Monitoring, Controller, Camera, Admin, User],
       host: 'localhost',
-      logging: true,
+      logging: false,
       password: 'hamza',
       port: 3306,
       synchronize: true,
       type: 'mysql',
       username: 'root',
     }),
+    HttpModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

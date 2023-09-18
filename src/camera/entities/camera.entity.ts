@@ -15,16 +15,13 @@ export class Camera extends TimeEntities {
   ip: string;
 
   @Column()
-  serial: string;
+  deviceKey: string;
 
   @Column({
     type: 'enum',
     enum: Placement,
   })
   placement: Placement;
-
-  @Column()
-  photo: string;
 
   @ManyToOne(() => Gate, (gate) => gate.cameras)
   gate: Gate;
