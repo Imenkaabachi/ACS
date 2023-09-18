@@ -15,9 +15,11 @@ import {
   JoinTable,
 } from 'typeorm';
 import { Visitor } from '../../visitor/entities/visitor.entity';
+import { JobRole } from 'src/generics/enums/jobRole';
+import { TimeEntities } from 'src/generics/timeEntities';
 
 @Entity()
-export class Gate {
+export class Gate extends TimeEntities {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -28,12 +30,15 @@ export class Gate {
   alarm: Alarm;
 
   @Column()
-  openDate: string;
+  openDate: String;
 
   @Column({
     default: Status.Closed,
   })
   status: Status;
+
+  @Column()
+  relayIndex: number;
 
   @OneToMany(() => Camera, (camera) => camera.gate, {
     cascade: ['insert', 'remove', 'update'],
@@ -54,17 +59,23 @@ export class Gate {
   })
   controller: Controller;
 
-  @ManyToMany(() => Visitor, (visitor) => visitor.gates)
+  @ManyToMany(() => Visitor, (visitor) => visitor.gates, {
+    cascade: ['insert', 'remove', 'update'],
+    eager: true,
+  })
   @JoinTable({
-    name: 'history',
+    name: 'access_rights',
     joinColumn: {
-      name: 'visitor_id',
+      name: 'gate_id',
       referencedColumnName: 'id',
     },
     inverseJoinColumn: {
-      name: 'gate_id',
+      name: 'visitor_id',
       referencedColumnName: 'id',
     },
   })
   visitors: Visitor[];
+
+  @Column({ type: 'json' })
+  jobs: JobRole[];
 }

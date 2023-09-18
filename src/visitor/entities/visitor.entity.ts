@@ -6,6 +6,7 @@ import {
   TableInheritance,
 } from 'typeorm';
 import { Gate } from '../../gate/entities/gate.entity';
+import { TimeEntities } from 'src/generics/timeEntities';
 
 @Entity()
 @TableInheritance({
@@ -14,7 +15,7 @@ import { Gate } from '../../gate/entities/gate.entity';
     name: 'role',
   },
 })
-export class Visitor {
+export class Visitor extends TimeEntities {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -36,9 +37,11 @@ export class Visitor {
   sexe: string;
 
   @Column()
-  age: number;
+  age: string;
 
-  @Column()
+  @Column({
+    default: null,
+  })
   bioCredential: string;
 
   @ManyToMany(() => Gate, (gate) => gate.visitors)

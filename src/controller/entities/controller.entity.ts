@@ -1,9 +1,19 @@
 import { Gate } from 'src/gate/entities/gate.entity';
 import { Signal } from 'src/generics/enums/signal';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { TimeEntities } from 'src/generics/timeEntities';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  BeforeInsert,
+  BeforeUpdate,
+} from 'typeorm';
+import { Exclude } from 'class-transformer';
+import { Relay } from '../classes/relay';
 
 @Entity('controller')
-export class Controller {
+export class Controller extends TimeEntities {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -14,6 +24,18 @@ export class Controller {
   })
   signal: Signal;
 
+  @Column()
+  type: string;
+
+  @Column()
+  serialNumber: string;
+
+  @Column('json')
+  relays: Relay[];
+
   @OneToMany(() => Gate, (gate) => gate.controller)
   gates: Gate[];
+
+  // @BeforeInsert()
+  // @BeforeUpdate()
 }

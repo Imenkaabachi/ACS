@@ -3,7 +3,9 @@ import { Visitor } from './visitor.entity';
 
 @ChildEntity()
 export class Admin extends Visitor {
-  @Column()
+  @Column({
+    unique: true,
+  })
   username: string;
 
   @Column()

@@ -19,12 +19,20 @@ export class CameraController {
   create(@Body() createCameraDto: CreateCameraDto) {
     return this.cameraService.create(createCameraDto);
   }
+  @Post('camera-callback')
+  callback(@Body() callback) {
+    console.log('hello in the callback');
+    return this.cameraService.callback(callback);
+  }
 
   @Get()
   findAll() {
     return this.cameraService.findAll();
   }
-
+  @Get(':deviceKey')
+  getByDeviceKey(@Param('deviceKey') deviceKey: string) {
+    return this.cameraService.getByDeviceKey(deviceKey);
+  }
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.cameraService.findOne(id);
@@ -37,6 +45,6 @@ export class CameraController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.cameraService.remove(id);
+    return this.cameraService.softremove(id);
   }
 }
