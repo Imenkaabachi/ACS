@@ -62,15 +62,15 @@ export class CameraService extends CrudService<Camera> {
           if (!access) {
             console.log("you don't have access to this department");
           } else {
-            console.log(gate.controller.serialNumber);
-            console.log(
-              this.gateaway.getSocketBySerialNumber(
-                gate.controller.serialNumber,
-              ),
-            );
-            this.gateaway
-              .getSocketBySerialNumber(gate.controller.serialNumber)
-              .send('relay ' + gate.relayIndex);
+            let alternateRelay = false;
+
+            const interval = setInterval(() => {
+              const message = alternateRelay ? 'relay2' : 'relay1';
+              this.gateaway
+                .getSocketByserialNumber(gate.controller.serialNumber)
+                .send(message);
+              alternateRelay = !alternateRelay;
+            }, 5000);
           }
         }
         return parsedBody;

@@ -62,6 +62,7 @@ export class VisitorService extends CrudService<Visitor> {
       const gates = await this.gateService.findGatesByJob(job);
       user.gates = gates;
       await this.userRepository.save(user);
+      console.log('sending');
       var options = {
         method: 'POST',
         uri: 'http://127.0.0.1:5000/encode',
@@ -73,7 +74,7 @@ export class VisitorService extends CrudService<Visitor> {
       };
       await request(options)
         .then(function (parsedBody) {
-          console.log(parsedBody['encoded_image']);
+          console.log(parsedBody);
         })
         .catch(function (err) {
           console.log(err);
