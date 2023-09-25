@@ -54,7 +54,7 @@ export class VisitorService extends CrudService<Visitor> {
   ): Promise<User> {
     const path = 'C:/Users/ASUS X509 I7/ACS/uploads/BioCredentials/';
     try {
-      const user = await this.userRepository.create({
+      const user = this.userRepository.create({
         ...createUserDto,
         bioCredential: file.filename,
       });
@@ -62,7 +62,6 @@ export class VisitorService extends CrudService<Visitor> {
       const gates = await this.gateService.findGatesByJob(job);
       user.gates = gates;
       await this.userRepository.save(user);
-      console.log('sending');
       var options = {
         method: 'POST',
         uri: 'http://127.0.0.1:5000/encode',
